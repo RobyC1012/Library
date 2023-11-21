@@ -1,4 +1,6 @@
 ﻿
+using Library.Models;
+
 namespace Library.Utils;
 
 public class GenList<T, K>

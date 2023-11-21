@@ -24,6 +24,18 @@ public class Library
         Member member = new Member(name, phone, address);
         member.ID = _memberList.Size()+1;
         _memberList.InsertMember(member);
+        Console.WriteLine($"\nMember added successfully. [ID: {member.ID}, Name: {member.name}, Phone: {member.phone}, Address: {member.address}]\n");
+    }
+    
+    public void BorrowElem(int ID_member, int ID_elem)
+    {
+        Member member = _memberList.SearchMember(ID_member);
+        AbstractElem elem = _elemList.SearchBook(ID_elem);
+        
+        if (member == null) Console.WriteLine("\nMember not found.\n");
+        else if (elem == null) Console.WriteLine("\nElement not found.\n");
+        else _memberList.BorrowElem(member, elem);
+        
     }
     
     public void ShowElems()
