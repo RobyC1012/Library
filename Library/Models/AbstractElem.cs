@@ -1,9 +1,12 @@
-﻿namespace Library.Models;
+﻿using Library.Utils.Visitor;
 
-public abstract class AbstractElem 
+namespace Library.Models;
+
+public abstract class AbstractElem
 {
     public int Id { get; set; }
-    public string title { get; set; }
+    public String title { get; set; }
+    public DateTime? returnDate { get; set; }
     public Member borrowedBy { get; set; }
     
     protected AbstractElem () {}
@@ -12,4 +15,6 @@ public abstract class AbstractElem
     {
         this.title = title;
     }
+    
+    public abstract void Accept(Show visitor);
 }

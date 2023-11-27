@@ -6,7 +6,7 @@ public class BookParamFactory : ParamFactory
 {
     public String author;
     
-    public BookParamFactory(string? title, String author)
+    public BookParamFactory(string? title, String author) : base(title)
     {
         this.Title = title;
         this.author = author;

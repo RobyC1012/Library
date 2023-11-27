@@ -1,4 +1,6 @@
-﻿namespace Library.Models;
+﻿using Library.Utils.Visitor;
+
+namespace Library.Models;
 
 public class Magazine : AbstractElem
 {
@@ -7,5 +9,10 @@ public class Magazine : AbstractElem
     {
         this.title = title;
         this.number = number;
+    }
+    
+    public override void Accept(Show visitor)
+    {
+        visitor.showMagazine(this);
     }
 }

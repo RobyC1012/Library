@@ -1,8 +1,9 @@
 ﻿using Library.Models;
+using Library.Utils.Visitor;
 
 namespace Library.Utils;
 
-public class MemberList : GenList<Member, int>
+public class MemberList : GenList<Member, int> 
 {
     private static MemberList _instance;
     private MemberList() {}
@@ -10,7 +11,7 @@ public class MemberList : GenList<Member, int>
     
     public bool InsertMember(Member member)
     {
-        AddElem(member.ID, member);
+        AddElem(member.Id, member);
         return true;
     }
 
@@ -23,29 +24,32 @@ public class MemberList : GenList<Member, int>
     {
         return RemoveElem(member);
     }
+
+    public void BorrowElem(Member member, AbstractElem elem)
+    {
+        elem.returnDate = DateTime.Now.AddDays(30);
+        elem.borrowedBy = member;
+        member.borrowedElems.Add(elem);
+        Console.WriteLine($"\nMember {member.name} borrowed {elem.title} successfully. Return limit date: {elem.returnDate}.\n");
+    }
     
-    public void GetAllMembers()
+    public void ReturnElem(Member member, AbstractElem elem)
+    {
+        if(elem.returnDate < DateTime.Now)
+        {
+            member.tax += 5;
+            Console.WriteLine($"\nMember {member.name} returned {elem.title} with delay. Tax: {member.tax}.\n");
+        }
+        member.borrowedElems.Remove(elem);
+        Console.WriteLine($"Member {member.name} returned {elem.title} successfully.");
+    }
+    
+    public void Accept(Show visitor)
     {
         List<Member> members = GetAll();
         foreach (var member in members)
         {
-            Console.WriteLine("\nID: " + member.ID + "; Name: " + member.name + "; Phone: " + member.phone + "; Address: " + member.address + "; Borrowed elements: ");
-            foreach (var elem in member.borrowedElems)
-            {
-                if (elem is Book b)
-                {
-                    Console.WriteLine($"Book - ID: {elem.Id}; Title: {elem.title}; Author: {b.author}.");
-                } else if (elem is Magazine m)
-                {
-                    Console.WriteLine($"Magazine - ID: {elem.Id}; Title: {elem.title}; Number: {m.number}.");
-                }
-            }
+            visitor.showMember(member);
         }
-    }
-
-    public void BorrowElem(Member member, AbstractElem elem)
-    {
-        member.borrowedElems.Add(elem);
-        Console.WriteLine($"\nMember {member.name} borrowed {elem.title} successfully.\n");
     }
 }

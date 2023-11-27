@@ -1,20 +1,21 @@
 ﻿
 using Library.Models;
+using Library.Utils.Visitor;
 
 namespace Library.Utils;
 
 public class GenList<T, K>
 {
-    private Dictionary<K, T> _dictionary = new Dictionary<K, T>();
+    private Dictionary<K, T> _genList = new Dictionary<K, T>();
     
     protected void AddElem(K key, T elem)
     {
-        if (_dictionary.ContainsKey(key))
+        if (_genList.ContainsKey(key))
         {   
             Console.WriteLine("error");
             return;
         }
-        _dictionary.Add(key, elem);
+        _genList.Add(key, elem);
     }
     
     protected bool RemoveElem(T elem)
@@ -22,33 +23,33 @@ public class GenList<T, K>
         K key = GetById(elem);
         if (key == null)
             return false;
-        _dictionary.Remove(key);
+        _genList.Remove(key);
         return true;
     }
     
     protected List<T> GetAll()
     {
-        return _dictionary.Values.ToList();
+        return _genList.Values.ToList();
     }
     
     private bool Contains(K key)
     {
-        return _dictionary.ContainsKey(key);
+        return _genList.ContainsKey(key);
     }
     
     private K GetById(T elem)
     {
-        return _dictionary.FirstOrDefault(x => x.Value!.Equals(elem)).Key;
+        return _genList.FirstOrDefault(x => x.Value!.Equals(elem)).Key;
     }
     
     protected T Get(K key)
     {
-        return _dictionary[key];
+        return _genList[key];
     }
     
     public int Size()
     {
-        return _dictionary.Count;
+        return _genList.Count;
     }
     
 }

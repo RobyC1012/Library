@@ -2,9 +2,16 @@
 
 namespace Library.Utils.Factory;
 
-public class ParamFactory : AbstractElem
+public abstract class ParamFactory
 {
     public int Id;
-    public string? Title;
+    public String Title;
+    
+    protected ParamFactory() {}
+    
+    public ParamFactory(string? title)
+    {
+        this.Title = title;
+    }
     
 }

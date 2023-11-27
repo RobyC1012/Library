@@ -24,8 +24,11 @@ public class AbstractElemFactory
         else if (paramFactory.GetType() == typeof(MagazineParamFactory))
         {
             MagazineParamFactory magazineParamFactory = (MagazineParamFactory) paramFactory;
-            Magazine magazine = new Magazine(magazineParamFactory.Title, magazineParamFactory.Number);
-            magazine.Id = Library._elemList.Size()+1;
+            Magazine magazine = new Magazine(magazineParamFactory.Title, magazineParamFactory.Number)
+            {
+                Id = Library._elemList.Size()+1
+            
+            };
             return magazine;
         }
         else
