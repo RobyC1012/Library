@@ -10,7 +10,7 @@ public class GenList<T, K>
     
     protected void AddElem(K key, T elem)
     {
-        if (_genList.ContainsKey(key))
+        if (Contains(key))
         {   
             Console.WriteLine("error");
             return;

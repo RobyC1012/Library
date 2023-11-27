@@ -28,4 +28,9 @@ public class ShowVisitor : Show
             }
         }
     }
+    
+    public void showRetention(Retention retention)
+    {
+        Console.WriteLine($"ID: {retention.Id}, Member: {retention.member.name}[ID: {retention.member.Id}], Element: {retention.elem.title}[ID: {retention.elem.Id}], Date: {retention.date}, Tax: {retention.member.tax}");
+    }
 }

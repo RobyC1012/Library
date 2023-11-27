@@ -14,6 +14,7 @@ public abstract class AbstractElem
     protected AbstractElem (string? title)
     {
         this.title = title;
+        borrowedBy = null;
     }
     
     public abstract void Accept(Show visitor);

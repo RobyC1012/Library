@@ -21,7 +21,8 @@ public class AbstractElemFactory
             };
             return book;
         }
-        else if (paramFactory.GetType() == typeof(MagazineParamFactory))
+
+        if (paramFactory.GetType() == typeof(MagazineParamFactory))
         {
             MagazineParamFactory magazineParamFactory = (MagazineParamFactory) paramFactory;
             Magazine magazine = new Magazine(magazineParamFactory.Title, magazineParamFactory.Number)
@@ -31,10 +32,8 @@ public class AbstractElemFactory
             };
             return magazine;
         }
-        else
-        {
-            throw new Exception("Invalid type");
-        }
+      
+        throw new Exception("Invalid type");
     }
     
 }

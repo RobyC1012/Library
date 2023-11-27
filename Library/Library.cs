@@ -13,7 +13,10 @@ public class Library
 
     public static ElemList _elemList = ElemList.Instance();
     public static MemberList _memberList = MemberList.Instance();
-    
+    public static RetentionList _retentionList = RetentionList.Instance();
+
+    #region Add Member and Elements
+
     public void AddElem(ParamFactory paramFactory)
     {    
         AbstractElemFactory _elemFactory = AbstractElemFactory.Instance();
@@ -29,21 +32,22 @@ public class Library
         Console.WriteLine($"Member added successfully. [ID: {member.Id}, Name: {member.name}, Phone: {member.phone}, Address: {member.address}]");
     }
 
+    #endregion
+    
+    #region Borrow and Return
+
     public void BorrowElem(int ID_member, int ID_elem)
     {
-        Member member = _memberList.SearchMember(ID_member);
-        AbstractElem elem = _elemList.SearchElem(ID_elem);
+        Member member = SearchMember(ID_member);
+        AbstractElem elem = SearchElem(ID_elem);
         
         if (member == null) Console.WriteLine("\nMember not found.\n");
         else if (elem == null) Console.WriteLine("\nElement not found.\n");
+        
+        else if (elem.borrowedBy != null) Console.WriteLine("\nElement already borrowed.\n");
+        
         else _memberList.BorrowElem(member, elem);
         
-    }
-    
-    public bool HasBorrowedElem(int memberId2)
-    {
-        Member member = _memberList.SearchMember(memberId2);
-        return member.borrowedElems.Count > 0;
     }
 
     public void ReturnElem(int memberId2, int elemId)
@@ -59,42 +63,65 @@ public class Library
             _elemList.ReturnElem(member, elem);
         }
     }
+    
+    public bool HasBorrowedElem(int memberId2) { return _memberList.SearchMember(memberId2).borrowedElems.Count > 0; }
 
-    public void VisitElems(ShowVisitor visitor)
+    #endregion
+    
+    #region Retentions
+
+    public void PlaceRetention(int member_ID, int book_ID)
     {
-        _elemList.Accept(visitor);
-    }
-
-    public void VisitBooks(ShowVisitor visitor)
-    {
-        _elemList.AcceptBooks(visitor);
-    }
-
-    public void VisitMagazines(ShowVisitor visitor)
-    {
-        _elemList.AcceptMagazines(visitor);
-    }
-
-    public void VisitMembers(ShowVisitor visitor)
-    {
-        _memberList.Accept(visitor);
-    }
-
-
-    public void ShowBorrowedElems(int memberId2)
-    {
-        Member member = _memberList.SearchMember(memberId2);
-        foreach (var elem in member.borrowedElems)
+        Member member = SearchMember(member_ID);
+        AbstractElem elem = SearchElem(book_ID);
+        
+        if (member == null) Console.WriteLine("\nMember not found.\n");
+        else if (elem == null) Console.WriteLine("\nElement not found.\n");
+        else if(CheckRetention(member, elem)) Console.WriteLine("\nMember already has this retention.\n");
+        else
         {
-            if (elem is Book b)
-            {
-                Console.WriteLine($"[ID: {b.Id}, Title: {b.title}, Author: {b.author}, Limit Date: {b.returnDate}({(b.returnDate<DateTime.Now?"Late":"Ok")})]");
-            }
-            else if (elem is Magazine m)
-            {
-                Console.WriteLine($"[ID: {m.Id}, Title: {m.title}, Number: {m.number}, Limit Date: {m.returnDate}({(m.returnDate<DateTime.Now?"Late":"Ok")})]");
-            }
+            Retention retention = new Retention(member, elem);
+            _retentionList.InsertRetention(retention);
         }
     }
+
+    public void CancelRetention(int member_ID, int book_ID)
+    {
+        Member member = SearchMember(member_ID);
+        AbstractElem elem = SearchElem(book_ID);
+        
+        if (member == null) Console.WriteLine("\nMember not found.\n");
+        else if (elem == null) Console.WriteLine("\nElement not found.\n");
+        else if(!CheckRetention(member, elem)) Console.WriteLine("\nMember has no retention of this element.\n");
+        else
+        {
+            Retention retention = _retentionList.SearchRetention(member, elem);
+            _retentionList.Delete(retention);
+        }
+    }
+    
+    //public bool HasRetention(AbstractElem elem) { return _retentionList.HasRetention(elem); }
+
+    private bool CheckRetention(Member member, AbstractElem elem) { return _retentionList.CheckRetention(member, elem); }
+
+    #endregion
+
+    #region Visitor Pattern
+    
+        public void VisitElems(ShowVisitor visitor) { _elemList.Accept(visitor); }
+        public void VisitMembers(ShowVisitor visitor) { _memberList.Accept(visitor); }
+        public void VisitRetention(ShowVisitor visitor) { _retentionList.Accept(visitor); }
+        public void VisitAvailableBooks(ShowVisitor visitor) { _elemList.AcceptAvailableBooks(visitor); }
+        public void VisitAvailableMagazines(ShowVisitor visitor) { _elemList.AcceptAvailableMagazines(visitor); }
+        public void VisitBorrowedElems(ShowVisitor visitor, int member_ID) { _elemList.AcceptBorrowedElems(visitor, member_ID); }
+
+        #endregion
+
+    #region Search
+    
+        public Member SearchMember(int ID_member) { return _memberList.SearchMember(ID_member); }
+        public AbstractElem SearchElem(int ID_elem) { return _elemList.SearchElem(ID_elem); }
+        
+    #endregion
 }
 

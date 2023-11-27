@@ -59,21 +59,50 @@ public class ElemList : GenList<AbstractElem, int>
             }
         }
     }
-    
-    public void AcceptMagazines(ShowVisitor visitor)
+
+    public void AcceptAvailableBooks(ShowVisitor visitor)
     {
         List<AbstractElem> elems = GetAll();
         foreach (var elem in elems)
         {
-            if (elem is Magazine m)
+            if (elem is Book b && b.borrowedBy == null)
+            {
+                visitor.showBook(b);
+            }
+        }
+    }
+    
+    public void AcceptAvailableMagazines(ShowVisitor visitor)
+    {
+        List<AbstractElem> elems = GetAll();
+        foreach (var elem in elems)
+        {
+            if (elem is Magazine m && m.borrowedBy == null)
             {
                 visitor.showMagazine(m);
             }
         }
     }
 
+
     public void ReturnElem(Member member, AbstractElem elem)
     {
         elem.borrowedBy = null;
+    }
+
+    public void AcceptBorrowedElems(ShowVisitor visitor , int member_ID)
+    {
+        List<AbstractElem> elems = GetAll();
+        foreach (var elem in elems)
+        {
+            if (elem is Book b && b.borrowedBy != null && b.borrowedBy.Id == member_ID)
+            {
+                visitor.showBook(b);
+            }
+            else if (elem is Magazine m && m.borrowedBy != null && m.borrowedBy.Id == member_ID)
+            {
+                visitor.showMagazine(m);
+            }
+        }
     }
 }

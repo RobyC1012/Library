@@ -4,102 +4,126 @@ using Library.Utils.Visitor;
 
 namespace Library;
 
-class Program
+internal class Program
 {
-    static void Main(string[] args)
+    private static void Main(string[] args)
     {
-        Library library = Library.Instance(); 
-        
-        Fill(library);
-        
-        ShowVisitor showVisitor = new ShowVisitor(); Menu();
+        var library = Library.Instance();
 
-        int option3 ,option2, option = int.Parse(Console.ReadLine()!);
+        Fill(library);
+
+        var showVisitor = new ShowVisitor();
+        Menu();
+
+        int option3, option2, option = int.Parse(Console.ReadLine()!);
 
         while (option != 7)
         {
             switch (option)
             {
                 case 1:
+                    #region 1. Add element
+
                     Console.WriteLine("1. Book");
                     Console.WriteLine("2. Magazine");
-                    
+
                     option2 = int.Parse(Console.ReadLine()!);
                     ParamFactory param = null;
-                    
+
                     switch (option2)
                     {
                         case 1:
                             Console.WriteLine("Title: ");
-                            string bTitle = Console.ReadLine();
+                            var bTitle = Console.ReadLine();
                             Console.WriteLine("Author: ");
-                            string author = Console.ReadLine();
-                            
+                            var author = Console.ReadLine();
+
                             param = new BookParamFactory(bTitle, author);
                             break;
                         case 2:
                             Console.WriteLine("Title: ");
-                            string mTitle = Console.ReadLine();
+                            var mTitle = Console.ReadLine();
                             Console.WriteLine("Number: ");
-                            int number = int.Parse(Console.ReadLine()!);
-                            
+                            var number = int.Parse(Console.ReadLine()!);
+
                             param = new MagazineParamFactory(mTitle, number);
                             break;
                     }
-                    
-                    if(param != null) library.AddElem(param);
+
+                    if (param != null) library.AddElem(param);
+
+                    #endregion
                     break;
-                
                 case 2:
-                    Console.WriteLine("Name:");
-                    string name = Console.ReadLine();
-                    Console.WriteLine("Phone:");
-                    string phone = Console.ReadLine();
-                    Console.WriteLine("Address:");
-                    string address = Console.ReadLine();
+                    #region 2. Add member
                     
-                    library.AddMember(name,phone,address);
+                    Console.WriteLine("Name:");
+                    var name = Console.ReadLine();
+                    Console.WriteLine("Phone:");
+                    var phone = Console.ReadLine();
+                    Console.WriteLine("Address:");
+                    var address = Console.ReadLine();
+
+                    library.AddMember(name, phone, address);
+
+                    #endregion
                     break;
                 case 3:
+                    #region 3. Borrow
+
                     Console.WriteLine("Choose item to borrow:\n 1. Book\n 2. Magazine");
                     option3 = int.Parse(Console.ReadLine()!);
-                    
+
                     Console.WriteLine("Enter member ID:");
-                    int memberID = int.Parse(Console.ReadLine()!);
-                    
-                    if (option3 == 1) {
+                    var memberID = int.Parse(Console.ReadLine()!);
+
+                    if (option3 == 1)
+                    {
                         Console.WriteLine("Books:");
-                        library.VisitBooks(showVisitor); 
-                    } else {
-                        Console.WriteLine("Magazines:");
-                        library.VisitMagazines(showVisitor);
+                        library.VisitAvailableBooks(showVisitor);
                     }
-                    
-                    Console.WriteLine("\nEnter item ID:");
-                    int itemID = int.Parse(Console.ReadLine()!);
-                    
-                    library.BorrowElem(memberID, itemID);
-                    break;
-                case 4:
-                    Console.WriteLine("Enter member ID:");
-                    int memberID2 = int.Parse(Console.ReadLine()!);
-                    
-                    if (!library.HasBorrowedElem(memberID2)){ Console.WriteLine("Member has no borrowed elements."); break;}
                     else
                     {
-                        Console.WriteLine("Borrowed elements:");
-                        library.ShowBorrowedElems(memberID2);
+                        Console.WriteLine("Magazines:");
+                        library.VisitAvailableMagazines(showVisitor);
                     }
-                    
+
+                    Console.WriteLine("\nEnter item ID:");
+                    var itemID = int.Parse(Console.ReadLine()!);
+
+                    library.BorrowElem(memberID, itemID);
+
+                    #endregion
+                    break;
+                case 4:
+                    #region 4. Return
+
+                    Console.WriteLine("Enter member ID:");
+                    var memberID2 = int.Parse(Console.ReadLine()!);
+
+                    if (!library.HasBorrowedElem(memberID2))
+                    {
+                        Console.WriteLine("Member has no borrowed elements.");
+                        break;
+                    }
+
+                    Console.WriteLine("Borrowed elements:");
+                    library.VisitBorrowedElems(showVisitor, memberID2);
+
                     Console.WriteLine("Enter element ID:");
-                    int elemID = int.Parse(Console.ReadLine()!);
+                    var elemID = int.Parse(Console.ReadLine()!);
 
                     library.ReturnElem(memberID2, elemID);
+
+                    #endregion
                     break;
                 case 5:
+                    #region 5. Show
+
                     Console.WriteLine("1. Show all");
                     Console.WriteLine("2. Show members");
                     Console.WriteLine("3. Show elements");
+                    Console.WriteLine("4. Show retentions");
                     option2 = int.Parse(Console.ReadLine());
                     switch (option2)
                     {
@@ -113,19 +137,54 @@ class Program
                         case 3:
                             library.VisitElems(showVisitor);
                             break;
+                        case 4:
+                            library.VisitRetention(showVisitor);
+                            break;
                         default:
                             Console.WriteLine("Invalid option.");
                             break;
                     }
+
+                    #endregion
                     break;
                 case 6:
-                    Console.WriteLine("Not implemented.");
+                    #region 6. Retentions
+                    
+                    Console.WriteLine("1. Place retention");
+                    Console.WriteLine("2. Cancel retention");
+                    option2 = int.Parse(Console.ReadLine());
+                    switch (option2)
+                    {
+                        case 1:
+                            Console.WriteLine("Enter member ID:");
+                            var memberID3 = int.Parse(Console.ReadLine()!);
+
+                            Console.WriteLine("Enter element ID:");
+                            var elemID2 = int.Parse(Console.ReadLine()!);
+
+                            library.PlaceRetention(memberID3, elemID2);
+                            break;
+                        case 2:
+                            Console.WriteLine("Enter member ID:");
+                            var memberID4 = int.Parse(Console.ReadLine()!);
+
+                            Console.WriteLine("Enter element ID:");
+                            var elemID3 = int.Parse(Console.ReadLine()!);
+
+                            library.CancelRetention(memberID4, elemID3);
+                            break;
+                        default:
+                            Console.WriteLine("Invalid option.");
+                            break;
+                    }
+
+                    #endregion
                     break;
                 case 7:
                     Console.WriteLine("Exiting...");
-                    break; 
-                
+                    break;
             }
+
             Menu();
             option = int.Parse(Console.ReadLine()!);
         }
@@ -138,7 +197,7 @@ class Program
         Console.WriteLine("3. Borrow");
         Console.WriteLine("4. Return");
         Console.WriteLine("5. Show");
-        Console.WriteLine("6. Retentions - NOT IMPLEMENTED");
+        Console.WriteLine("6. Retentions");
         Console.WriteLine("7. Exit");
     }
 
@@ -149,20 +208,19 @@ class Program
         lib.AddMember("Mary", "987654321", "Street 2");
         lib.AddMember("Peter", "123123123", "Street 3");
         lib.AddMember("Paul", "321321321", "Street 4");
-        
+
         //fill with books
         lib.AddElem(new BookParamFactory("Ion", "Liviu Rebreanu"));
         lib.AddElem(new BookParamFactory("Morometii", "Marin Preda"));
         lib.AddElem(new BookParamFactory("Enigma Otiliei", "George Calinescu"));
         lib.AddElem(new BookParamFactory("Baltagul", "Mihail Sadoveanu"));
-        
+
         //fill with magazines
         lib.AddElem(new MagazineParamFactory("Revista Click", 1884));
         lib.AddElem(new MagazineParamFactory("Revista Bravo", 2000));
         lib.AddElem(new MagazineParamFactory("Revista Viva", 2010));
         lib.AddElem(new MagazineParamFactory("Revista Elle", 2015));
-        
+
         Console.WriteLine("\n\n\n\n\n\n\n\n");
     }
-    
 }
