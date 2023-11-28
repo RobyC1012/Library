@@ -6,12 +6,12 @@ public class ShowVisitor : Show
 {
     public void showBook(Book book)
     {
-        Console.WriteLine($"ID: {book.Id}, Title: {book.title}, Author: {book.author}" + (book.borrowedBy != null ? $" Borrowed by: {book.borrowedBy.name}[ID: {book.borrowedBy.Id}]." : ". " ));
+        Console.WriteLine($"ID: {book.Id}, Title: {book.title}, Author: {book.author}" + (book.borrowedBy != null ? $" Borrowed by: {book.borrowedBy.name}[ID: {book.borrowedBy.Id}, {(book.InHall == true ? "in Library" : "at Home")}]." : ". " ));
     }
 
     public void showMagazine(Magazine magazine)
     {
-        Console.WriteLine($"ID: {magazine.Id}, Title: {magazine.title}, Number: {magazine.number}" + (magazine.borrowedBy != null ? $" Borrowed by: {magazine.borrowedBy.name}[ID: {magazine.borrowedBy.Id}]." : ". "));
+        Console.WriteLine($"ID: {magazine.Id}, Title: {magazine.title}, Number: {magazine.number}" + (magazine.borrowedBy != null ? $" Borrowed by: {magazine.borrowedBy.name}[ID: {magazine.borrowedBy.Id}, {(magazine.InHall == true ? "in Library" : "at Home")}]." : ". "));
     }
 
     public void showMember(Member member)
@@ -21,16 +21,16 @@ public class ShowVisitor : Show
         {
             if (elem is Book b)
             {
-                Console.WriteLine($" > Book - ID: {elem.Id}; Title: {elem.title}; Author: {b.author}; Return date: {elem.returnDate}.");
+                Console.WriteLine($" > Book - ID: {elem.Id}; Title: {elem.title}; Author: {b.author}; Return date: {elem.returnDate}; Borrowed {(elem.InHall == true ? "in Library" : "at Home")}.");
             } else if (elem is Magazine m)
             {
-                Console.WriteLine($" > Magazine - ID: {elem.Id}; Title: {elem.title}; Number: {m.number}; Return date: {elem.returnDate}.");
+                Console.WriteLine($" > Magazine - ID: {elem.Id}; Title: {elem.title}; Number: {m.number}; Return date: {elem.returnDate}; Borrowed {(elem.InHall == true ? "in Library" : "at Home")}.");
             }
         }
     }
     
     public void showRetention(Retention retention)
     {
-        Console.WriteLine($"ID: {retention.Id}, Member: {retention.member.name}[ID: {retention.member.Id}], Element: {retention.elem.title}[ID: {retention.elem.Id}], Date: {retention.date}, Tax: {retention.member.tax}");
+        Console.WriteLine($"ID: {retention.Id}, Member: {retention.member.name}[ID: {retention.member.Id}], Element: {retention.elem.title}[ID: {retention.elem.Id}], Date: {retention.date}");
     }
 }

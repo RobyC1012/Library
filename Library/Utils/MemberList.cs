@@ -25,17 +25,18 @@ public class MemberList : GenList<Member, int>
         return RemoveElem(member);
     }
 
-    public void BorrowElem(Member member, AbstractElem elem)
+    public void BorrowElem(Member member, AbstractElem elem, bool bInHall)
     {
         elem.returnDate = DateTime.Now.AddDays(30);
         elem.borrowedBy = member;
+        elem.InHall = bInHall;
         member.borrowedElems.Add(elem);
-        Console.WriteLine($"\nMember {member.name} borrowed {elem.title} successfully. Return limit date: {elem.returnDate}.\n");
+        Console.WriteLine($"\nMember {member.name} borrowed {elem.title} successfully {(bInHall == true ? "in Library" : "at Home")}. Return limit date: {elem.returnDate}.\n");
     }
     
     public void ReturnElem(Member member, AbstractElem elem)
     {
-        if(elem.returnDate < DateTime.Now)
+        if(elem.returnDate > DateTime.Now)
         {
             member.tax += 5;
             Console.WriteLine($"\nMember {member.name} returned {elem.title} with delay. Tax: {member.tax}.\n");

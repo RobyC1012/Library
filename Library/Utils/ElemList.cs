@@ -88,6 +88,7 @@ public class ElemList : GenList<AbstractElem, int>
     public void ReturnElem(Member member, AbstractElem elem)
     {
         elem.borrowedBy = null;
+        elem.InHall = null;
     }
 
     public void AcceptBorrowedElems(ShowVisitor visitor , int member_ID)

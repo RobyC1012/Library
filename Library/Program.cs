@@ -90,8 +90,13 @@ internal class Program
 
                     Console.WriteLine("\nEnter item ID:");
                     var itemID = int.Parse(Console.ReadLine()!);
-
-                    library.BorrowElem(memberID, itemID);
+                    
+                    Console.WriteLine("Borrow: \n1.In library\n2.At home");
+                    option2 = int.Parse(Console.ReadLine()!);
+                    
+                    if (option2 == 1) library.BorrowElem(memberID, itemID, true);
+                    else if (option2 == 2) library.BorrowElem(memberID, itemID, false);
+                    else Console.WriteLine("Invalid option.");
 
                     #endregion
                     break;

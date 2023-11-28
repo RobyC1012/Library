@@ -36,7 +36,7 @@ public class Library
     
     #region Borrow and Return
 
-    public void BorrowElem(int ID_member, int ID_elem)
+    public void BorrowElem(int ID_member, int ID_elem, bool bInHall)
     {
         Member member = SearchMember(ID_member);
         AbstractElem elem = SearchElem(ID_elem);
@@ -46,7 +46,7 @@ public class Library
         
         else if (elem.borrowedBy != null) Console.WriteLine("\nElement already borrowed.\n");
         
-        else _memberList.BorrowElem(member, elem);
+        else _memberList.BorrowElem(member, elem, bInHall);
         
     }
 
