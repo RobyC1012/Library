@@ -4,8 +4,11 @@ namespace Library.Utils.Visitor;
 
 public interface Show
 {
-    public void showBook(Book book);
-    public void showMagazine(Magazine magazine);
-    public void showMember(Member member);
-    void showRetention(Retention retention);
+    public void show(Book book, int type = 1);
+    public void show(Magazine magazine, int type = 1);
+    public void show(Member member, int type = 1);
+    public void show(Retention retention, int type = 1);
+
+    public void show(Member member, AbstractElem elem, int type = 1);
+    
 }

@@ -29,7 +29,8 @@ public class Library
         member.Id = _memberList.Size()+1;
         
         _memberList.InsertMember(member);
-        Console.WriteLine($"Member added successfully. [ID: {member.Id}, Name: {member.name}, Phone: {member.phone}, Address: {member.address}]");
+        //Console.WriteLine($"Member added successfully. [ID: {member.Id}, Name: {member.name}, Phone: {member.phone}, Address: {member.address}]");
+        new ShowVisitor().show(member, 2);
     }
 
     #endregion
@@ -46,7 +47,7 @@ public class Library
         
         else if (elem.borrowedBy != null) Console.WriteLine("\nElement already borrowed.\n");
         
-        else _memberList.BorrowElem(member, elem, bInHall);
+        else _memberList.BorrowElem(member, elem);
         
     }
 
@@ -80,7 +81,10 @@ public class Library
         else if(CheckRetention(member, elem)) Console.WriteLine("\nMember already has this retention.\n");
         else
         {
-            Retention retention = new Retention(member, elem);
+            Retention retention = new Retention(member, elem) 
+            {
+                Id = _retentionList.Size() + 1
+            };
             _retentionList.InsertRetention(retention);
         }
     }

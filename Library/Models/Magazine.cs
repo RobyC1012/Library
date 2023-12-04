@@ -11,8 +11,8 @@ public class Magazine : AbstractElem
         this.number = number;
     }
     
-    public override void Accept(Show visitor)
+    public override void Accept(Show visitor, int type)
     {
-        visitor.showMagazine(this);
+        visitor.show(this, type);
     }
 }

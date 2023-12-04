@@ -80,12 +80,12 @@ internal class Program
                     if (option3 == 1)
                     {
                         Console.WriteLine("Books:");
-                        library.VisitAvailableBooks(showVisitor);
+                        library.VisitElems(showVisitor);
                     }
                     else
                     {
                         Console.WriteLine("Magazines:");
-                        library.VisitAvailableMagazines(showVisitor);
+                        library.VisitElems(showVisitor);
                     }
 
                     Console.WriteLine("\nEnter item ID:");

@@ -13,7 +13,7 @@ public class RetentionList : GenList<Retention, int>
     public bool InsertRetention(Retention retention)
     {
         AddElem(retention.Id, retention);
-        Console.WriteLine($"Retention added successfully. [ID: {retention.Id}, Member: {retention.member.name}, Element: {retention.elem.title}]");
+        new ShowVisitor().show(retention, 2);
         return true;
     }
 
@@ -53,19 +53,15 @@ public class RetentionList : GenList<Retention, int>
 
     public bool Delete(Retention retention)
     {
-        Console.WriteLine(
-            $"Retention cancelled successfully. [ID: {retention.Id}, Member: {retention.member.name}, Element: {retention.elem.title}]");
         RemoveElem(retention);
+        new ShowVisitor().show(retention, 3);
         return true;
     }
 
     public void Accept(ShowVisitor visitor)
     {
         List<Retention> retentions = GetAll();
-        foreach (var retention in retentions)
-        {
-            visitor.showRetention(retention);
-        }
+        visitor.show(retentions);
     }
 
     public bool HasRetention(AbstractElem elem)

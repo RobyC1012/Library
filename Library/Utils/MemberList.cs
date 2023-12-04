@@ -12,6 +12,7 @@ public class MemberList : GenList<Member, int>
     public bool InsertMember(Member member)
     {
         AddElem(member.Id, member);
+        new ShowVisitor().show(member, 2);
         return true;
     }
 
@@ -25,24 +26,22 @@ public class MemberList : GenList<Member, int>
         return RemoveElem(member);
     }
 
-    public void BorrowElem(Member member, AbstractElem elem, bool bInHall)
+    public void BorrowElem(Member member, AbstractElem elem)
     {
         elem.returnDate = DateTime.Now.AddDays(30);
         elem.borrowedBy = member;
-        elem.InHall = bInHall;
         member.borrowedElems.Add(elem);
-        Console.WriteLine($"\nMember {member.name} borrowed {elem.title} successfully {(bInHall == true ? "in Library" : "at Home")}. Return limit date: {elem.returnDate}.\n");
+        new ShowVisitor().show(member, elem, 1);
     }
     
     public void ReturnElem(Member member, AbstractElem elem)
     {
-        if(elem.returnDate > DateTime.Now)
+        if(elem.returnDate < DateTime.Now)
         {
             member.tax += 5;
-            Console.WriteLine($"\nMember {member.name} returned {elem.title} with delay. Tax: {member.tax}.\n");
         }
         member.borrowedElems.Remove(elem);
-        Console.WriteLine($"Member {member.name} returned {elem.title} successfully.");
+        new ShowVisitor().show(member, elem, 2);
     }
     
     public void Accept(Show visitor)
@@ -50,7 +49,7 @@ public class MemberList : GenList<Member, int>
         List<Member> members = GetAll();
         foreach (var member in members)
         {
-            visitor.showMember(member);
+            visitor.show(member);
         }
     }
 }

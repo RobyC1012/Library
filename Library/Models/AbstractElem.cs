@@ -9,16 +9,13 @@ public abstract class AbstractElem
     public DateTime? returnDate { get; set; }
     public Member borrowedBy { get; set; }
     
-    public bool? InHall { get; set; }
-    
     protected AbstractElem () {}
     
     protected AbstractElem (string? title)
     {
         this.title = title;
         borrowedBy = null;
-        InHall = true;
     }
     
-    public abstract void Accept(Show visitor);
+    public abstract void Accept(Show visitor, int type);
 }

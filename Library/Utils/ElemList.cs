@@ -12,13 +12,9 @@ public class ElemList : GenList<AbstractElem, int>
     
     public bool InsertElem(AbstractElem elem)
     {
+        
         AddElem(elem.Id, elem);
-        if (elem is Book b)
-        {
-            Console.WriteLine($"Book added successfully. [ID: {b.Id}, Title: {b.title}, Author: {b.author}]");
-        } else if(elem is Magazine m){
-            Console.WriteLine($"Magazine added successfully. [ID: {m.Id}, Title: {m.title}, Number: {m.number}]");
-        }
+        new ShowVisitor().show(elem, 2);
         return true;
     }
 
@@ -34,61 +30,13 @@ public class ElemList : GenList<AbstractElem, int>
 
     public void Accept(ShowVisitor visitor)
     {
-        List<AbstractElem> elems = GetAll();
-        foreach (var elem in elems)
-        {
-            if (elem is Book b)
-            {
-                visitor.showBook(b);
-            }
-            else if (elem is Magazine m)
-            {
-                visitor.showMagazine(m);
-            }
-        }
+        List<AbstractElem> elem = GetAll();
+        visitor.show(elem);
     }
-
-    public void AcceptBooks(ShowVisitor visitor)
-    {
-        List<AbstractElem> elems = GetAll();
-        foreach (var elem in elems)
-        {
-            if (elem is Book b)
-            {
-                visitor.showBook(b);
-            }
-        }
-    }
-
-    public void AcceptAvailableBooks(ShowVisitor visitor)
-    {
-        List<AbstractElem> elems = GetAll();
-        foreach (var elem in elems)
-        {
-            if (elem is Book b && b.borrowedBy == null)
-            {
-                visitor.showBook(b);
-            }
-        }
-    }
-    
-    public void AcceptAvailableMagazines(ShowVisitor visitor)
-    {
-        List<AbstractElem> elems = GetAll();
-        foreach (var elem in elems)
-        {
-            if (elem is Magazine m && m.borrowedBy == null)
-            {
-                visitor.showMagazine(m);
-            }
-        }
-    }
-
 
     public void ReturnElem(Member member, AbstractElem elem)
     {
         elem.borrowedBy = null;
-        elem.InHall = null;
     }
 
     public void AcceptBorrowedElems(ShowVisitor visitor , int member_ID)
@@ -98,11 +46,35 @@ public class ElemList : GenList<AbstractElem, int>
         {
             if (elem is Book b && b.borrowedBy != null && b.borrowedBy.Id == member_ID)
             {
-                visitor.showBook(b);
+                visitor.show(b);
             }
             else if (elem is Magazine m && m.borrowedBy != null && m.borrowedBy.Id == member_ID)
             {
-                visitor.showMagazine(m);
+                visitor.show(m);
+            }
+        }
+    }
+
+    public void AcceptAvailableMagazines(ShowVisitor visitor)
+    {
+        List<AbstractElem> elems = GetAll();
+        foreach (var elem in elems)
+        {
+            if (elem is Magazine m && m.borrowedBy == null)
+            {
+                visitor.show(m);
+            }
+        }
+    }
+    
+    public void AcceptAvailableBooks(ShowVisitor visitor)
+    {
+        List<AbstractElem> elems = GetAll();
+        foreach (var elem in elems)
+        {
+            if (elem is Book b && b.borrowedBy == null)
+            {
+                visitor.show(b);
             }
         }
     }

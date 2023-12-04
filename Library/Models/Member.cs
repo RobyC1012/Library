@@ -34,7 +34,7 @@ public class Member
     
     public void Accept(Show visitor)
     {
-        visitor.showMember(this);
+        visitor.show(this);
     }
     
 }
