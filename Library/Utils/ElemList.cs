@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using Library.Models;
+using Library.Models.Decorator;
 using Library.Utils.Visitor;
 
 namespace Library.Utils;
@@ -12,7 +13,6 @@ public class ElemList : GenList<AbstractElem, int>
     
     public bool InsertElem(AbstractElem elem)
     {
-        
         AddElem(elem.Id, elem);
         new ShowVisitor().show(elem, 2);
         return true;

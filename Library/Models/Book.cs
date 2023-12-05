@@ -13,14 +13,6 @@ public class Book : AbstractElem
     
     public override void Accept(Show visitor, int type)
     {
-        switch (type)
-        {
-            case 1:
-                Console.WriteLine($"ID: {Id}, Title: {title}, Author: {author}" + (borrowedBy != null ? $" Borrowed by: {borrowedBy.name}[ID: {borrowedBy.Id}]." : ". "));
-                break;
-            case 2: 
-                Console.WriteLine($"Book added successfully. [ID: {Id}, Title: {title}, Author: {author}]");
-                break;
-        }
+        visitor.show(this, type);
     }
 }
