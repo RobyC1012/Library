@@ -4,11 +4,11 @@ namespace Library.Models;
 
 public class BookParamFactory : ParamFactory
 {
-    public String author;
-    
-    public BookParamFactory(string? title, String author) : base(title)
+    public string Author;
+
+    public BookParamFactory(string title, string author, int inRoom, float withTax) : base(title, inRoom, withTax)
     {
-        this.Title = title;
-        this.author = author;
+        Title = title;
+        Author = author;
     }
 }

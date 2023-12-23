@@ -1,4 +1,5 @@
 ﻿using Library.Models;
+using Library.Models.Decorator;
 using Library.Utils.Factory;
 
 namespace Library;
@@ -6,7 +7,7 @@ namespace Library;
 public class AbstractElemFactory
 {
     private static AbstractElemFactory? _instance;
-    private AbstractElemFactory() {}
+    private AbstractElemFactory() { }
     public static AbstractElemFactory? Instance() => _instance == null ? _instance = new AbstractElemFactory() : _instance;
     
     
@@ -14,26 +15,28 @@ public class AbstractElemFactory
     {
         if (paramFactory.GetType() == typeof(BookParamFactory))
         {
-            BookParamFactory bookParamFactory = (BookParamFactory) paramFactory;
-            Book book = new Book(bookParamFactory.Title, bookParamFactory.author)
-            {
-                Id = Library._elemList.Size()+1
-            };
+            var bookParamFactory = (BookParamFactory)paramFactory;
+            AbstractElem book =
+                new Book(bookParamFactory.Title, bookParamFactory.Author) { Id = Library._elemList.Size() + 1 };
+
+            if (bookParamFactory.InRoom == 1) book = new ElemInRoom(book, true);
+            if (bookParamFactory.Tax > 0) book = new ElemWithTax(book, bookParamFactory.Tax);
+
             return book;
         }
 
         if (paramFactory.GetType() == typeof(MagazineParamFactory))
         {
-            MagazineParamFactory magazineParamFactory = (MagazineParamFactory) paramFactory;
-            Magazine magazine = new Magazine(magazineParamFactory.Title, magazineParamFactory.Number)
-            {
-                Id = Library._elemList.Size()+1
-            
-            };
+            var magazineParamFactory = (MagazineParamFactory)paramFactory;
+            AbstractElem magazine =
+                new Magazine(magazineParamFactory.Title, magazineParamFactory.Number)
+                    { Id = Library._elemList.Size() + 1 };
+
+            if (magazineParamFactory.InRoom == 1) magazine = new ElemInRoom(magazine, true);
+            if (magazineParamFactory.Tax > 0) magazine = new ElemWithTax(magazine, magazineParamFactory.Tax);
             return magazine;
         }
-      
-        throw new Exception("Invalid type");
+
+        throw new Exception("Invalid paramFactory.");
     }
-    
 }

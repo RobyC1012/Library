@@ -4,14 +4,14 @@ namespace Library.Utils.Factory;
 
 public abstract class ParamFactory
 {
-    public int Id;
-    public String Title;
-    
-    protected ParamFactory() {}
-    
-    public ParamFactory(string? title)
+    public string Title;
+    public int InRoom;
+    public float Tax;
+
+    public ParamFactory(string? title, int inRoom, float tax)
     {
-        this.Title = title;
+        Title = title;
+        InRoom = inRoom;
+        Tax = tax;
     }
-    
 }

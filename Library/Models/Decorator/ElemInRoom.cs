@@ -6,16 +6,17 @@ public class ElemInRoom : AbstractElem
 {
     public bool inRoom { get; set; }
     public AbstractElem elem { get; set; }
-    
-    public ElemInRoom(AbstractElem Elem, bool InRoom)
+
+    public ElemInRoom(AbstractElem Elem, bool InRoom) : base(Elem.title)
     {
-        elem = elem;
+        elem = Elem;
+        title = Elem.title;
+        Id = Elem.Id;
         inRoom = InRoom;
     }
-    
-    
+
     public override void Accept(Show visitor, int type)
     {
-        throw new NotImplementedException();
+        visitor.show(this, type);
     }
 }

@@ -4,9 +4,11 @@ public class MagazineParamFactory : ParamFactory
 {
     public int Number;
 
-    public MagazineParamFactory(string? title, int number) : base(title)
+    public MagazineParamFactory(string title, int number, int inRoom, float withTax) : base(title, inRoom, withTax)
     {
-        this.Title = title;
-        this.Number = number;
+        Title = title;
+        Number = number;
+        InRoom = inRoom;
+        Tax = withTax;
     }
 }
